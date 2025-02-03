@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using White.Lagoon.Domain.Entities;
 
 namespace White.Lagoon.infrastructure.Data
 {
@@ -12,7 +13,7 @@ namespace White.Lagoon.infrastructure.Data
     {
       public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
         }
+        public DbSet<Villa> Villas { get; set; }
     }
 }
