@@ -1,29 +1,49 @@
 ﻿@model IEnumerable<White.Lagoon.Domain.Entities.Villa>
 
-<h1> Villa List</h1>
+
+<div class=" w-100 card border-0 p-4">
+	<div class="card-header bg-success bg-gradient m-lg-0 py-3">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h2 class="text-white py-2"> Villa List</h2>
+			</div>
+		</div>
+	</div>
+
+	<div class="card-body border p-4">
+		<div class="row pb-3">
+			<div class="col-6 offset-6 text-end">
+				<a asp-controller="Villa" asp-action="" class="btn btn-secondary">
+					Create New Villa
+				</a>
+			</div>
+		</div>
+		<table class="table table-border table-striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>Sqft</th>
+					<th>Occupancy</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				@foreach (var Obj in Model)
+				{
+					<tr>
+						<td>@Obj.Name</td>
+						<td>@Obj.Price</td>
+						<td>@Obj.Sqft</td>
+						<td>@Obj.Occupancy</td>
+					</tr>
+				}
+			</tbody>
+
+		</table>
+	</div>
+
+</div>
 
 
-<table class="table table-border table-striped">
-<thead>
-	<tr>
-		    <th>Name</th>
-			<th>Price</th>
-			<th>Sqft</th>
-			<th>Occupancy</th>
-	</tr>
-</thead>
-
-<tbody>
-
-		@foreach (var Obj in Model)
-		{
-		<tr>
-			<td>@Obj.Name</td>
-			<td>@Obj.Price</td>
-			<td>@Obj.Sqft</td>
-			<td>@Obj.Occupancy</td>
-		</tr>
-		}
-</tbody>
-
-</table>
