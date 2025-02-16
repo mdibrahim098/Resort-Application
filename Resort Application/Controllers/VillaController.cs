@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Mvc;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
 
@@ -21,13 +22,20 @@ namespace Resort_Application.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(Villa Obj)
         {
+            if (ModelState.IsValid)
+            {
                 _db.Villas.Add(Obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
+            }
+
+            return View();
         }
+       
 
 
     }
