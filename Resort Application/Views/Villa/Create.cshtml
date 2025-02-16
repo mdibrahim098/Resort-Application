@@ -37,6 +37,19 @@
 					<input asp-for="ImageUrl" class="form-control border shadow" />
 					<label asp-for="ImageUrl" class="ms-2"></label>
 				</div>
+
+				<div class="row pt-2">
+					<div class=" col-6 col-md-3">
+						<button type="submit" class="btn btn-success w-100">
+							<i class="bi bi-plus-circle"></i></>Create
+						</button>
+					</div>
+					<div class=" col-6 col-md-3">
+						<a asp-controller="Villa" asp-action="Index" class="btn btn-secondary w-100">
+							<i class="bi bi-x-circle"></i></>Cancel
+						</a>
+					</div>
+				</div>
 			</div>
 		</form>
 	</div>
