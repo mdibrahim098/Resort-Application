@@ -28,7 +28,7 @@ namespace Resort_Application.Controllers
         {
             if (Obj.Name== Obj.Description)
             {
-                ModelState.AddModelError("", "The description cannot exactly match the name.");
+                ModelState.AddModelError("Name", "The description cannot exactly match the name.");
             }
             if (ModelState.IsValid)
             {
