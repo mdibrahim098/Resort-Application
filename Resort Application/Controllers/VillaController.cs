@@ -26,6 +26,10 @@ namespace Resort_Application.Controllers
         [HttpPost]
         public IActionResult Create(Villa Obj)
         {
+            if (Obj.Name== Obj.Description)
+            {
+                ModelState.AddModelError("", "The description cannot exactly match the name.");
+            }
             if (ModelState.IsValid)
             {
                 _db.Villas.Add(Obj);
