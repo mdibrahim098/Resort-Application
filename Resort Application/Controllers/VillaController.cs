@@ -36,12 +36,11 @@ namespace Resort_Application.Controllers
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             return View();
         }
 
 
-        public IActionResult Edit(int villaId)
+        public IActionResult Update(int villaId)
         {
             Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);
             if (obj == null)
