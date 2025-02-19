@@ -52,6 +52,20 @@ namespace Resort_Application.Controllers
             return View(obj);
         }
 
+        [HttpPost]
+        public IActionResult Update(Villa Obj)
+        {
+            
+            if (ModelState.IsValid && Obj.Id>0)
+            {
+                _db.Villas.Update(Obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+
 
     }
 }
