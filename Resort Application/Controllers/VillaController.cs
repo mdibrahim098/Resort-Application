@@ -68,25 +68,25 @@ namespace Resort_Application.Controllers
         public IActionResult Delete(int villaId)
         {
             Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);   
-            if (obj == null)
+            if (obj is null)
             {
                 return RedirectToAction("Error", "Home");
             }
             return View(obj);
         }
 
-        //[HttpPost]
-        //public IActionResult Update(Villa Obj)
-        //{
-
-        //    if (ModelState.IsValid && Obj.Id > 0)
-        //    {
-        //        _db.Villas.Update(Obj);
-        //        _db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View();
-        //}
+        [HttpPost]
+        public IActionResult Delete(Villa Obj)
+        {
+            Villa? objFromDb = _db.Villas.FirstOrDefault(u=> u.Id == Obj.Id);
+            if (objFromDb is not null)
+            {
+                _db.Villas.Remove(objFromDb);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
 
 
     }
