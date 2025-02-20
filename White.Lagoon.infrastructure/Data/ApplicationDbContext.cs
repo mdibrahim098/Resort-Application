@@ -15,6 +15,7 @@ namespace White.Lagoon.infrastructure.Data
         {
         }
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<VillaNumber> VillaNumbers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +53,66 @@ namespace White.Lagoon.infrastructure.Data
                     }
 
                 );
+
+
+            modelBuilder.Entity<VillaNumber>().HasData(
+                new VillaNumber
+                {
+                    Villa_number = 101,
+                    VillaId = 1
+                  
+                },
+                 new VillaNumber
+                 {
+                     Villa_number = 102,
+                     VillaId = 1
+
+                 },
+                  new VillaNumber
+                  {
+                      Villa_number = 103,
+                      VillaId = 1
+
+                  },
+                   new VillaNumber
+                   {
+                       Villa_number = 104,
+                       VillaId = 1
+
+                   },
+                    new VillaNumber
+                    {
+                        Villa_number = 201,
+                        VillaId = 2
+
+                    },
+                      new VillaNumber
+                      {
+                          Villa_number = 202,
+                          VillaId = 2
+
+                      },
+                        new VillaNumber
+                        {
+                            Villa_number = 203,
+                            VillaId = 2
+
+                        },
+                          new VillaNumber
+                          {
+                              Villa_number = 301,
+                              VillaId = 3
+
+                          },
+                            new VillaNumber
+                            {
+                                Villa_number = 302,
+                                VillaId = 3
+
+                            }
+                            );
+
+
         }
     }
 }
