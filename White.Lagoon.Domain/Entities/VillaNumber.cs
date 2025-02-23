@@ -11,6 +11,7 @@ namespace White.Lagoon.Domain.Entities
     public class VillaNumber
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Display(Name = "Villa Number")]
         public int Villa_number { get; set; }
 
 
