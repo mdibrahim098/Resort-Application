@@ -26,7 +26,7 @@ namespace Resort_Application.Controllers
         [HttpPost]
         public IActionResult Create(VillaNumber Obj)
         {
-            
+            //ModelState.Remove("Villa");
             if (ModelState.IsValid)
             {
                 _db.VillaNumbers.Add(Obj);

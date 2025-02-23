@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace White.Lagoon.Domain.Entities
 {
@@ -17,6 +18,7 @@ namespace White.Lagoon.Domain.Entities
 
         [ForeignKey("Villa")]
         public int VillaId { get; set; }
+        [ValidateNever]
         public Villa Villa { get; set; }
         public string? SpecialDetails { get; set; } 
 
