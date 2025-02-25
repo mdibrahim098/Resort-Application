@@ -36,17 +36,28 @@ namespace Resort_Application.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(VillaNumber Obj)
+        public IActionResult Create(VillaNumberVM Obj)
         {
             //ModelState.Remove("Villa");
-            if (ModelState.IsValid)
+
+            bool roomNumberExists = _db.VillaNumbers.Any(u=>u.Villa_number == Obj.VillaNumber.Villa_number);
+            if (ModelState.IsValid && !roomNumberExists)
             {
-                _db.VillaNumbers.Add(Obj);
+                _db.VillaNumbers.Add(Obj.VillaNumber);
                 _db.SaveChanges();
                 TempData["success"] = "The Villa number has been created successfully";
                 return RedirectToAction("Index");
             }
-            return View();
+            if (roomNumberExists)
+            {
+                TempData["error"] = "The Villa Number already exists.";
+            }
+            Obj.VillaList = _db.Villas.ToList().Select(u=> new SelectListItem
+            {
+                Text =u.Name,
+                Value = u.Id.ToString()
+            });
+            return View(Obj);
         }
 
 
