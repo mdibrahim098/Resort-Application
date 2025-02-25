@@ -46,7 +46,7 @@ namespace Resort_Application.Controllers
                 _db.VillaNumbers.Add(Obj.VillaNumber);
                 _db.SaveChanges();
                 TempData["success"] = "The Villa number has been created successfully";
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             if (roomNumberExists)
             {
@@ -88,7 +88,7 @@ namespace Resort_Application.Controllers
                 _db.VillaNumbers.Update(villaNumberVM.VillaNumber);
                 _db.SaveChanges();
                 TempData["success"] = "The Villa number has been updated successfully";
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             villaNumberVM.VillaList = _db.Villas.ToList().Select(u => new SelectListItem
             {
@@ -127,7 +127,7 @@ namespace Resort_Application.Controllers
                 _db.VillaNumbers.Remove(objFromDb);
                 _db.SaveChanges();
                 TempData["success"] = "The Villa number has been deleted successfully";
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             TempData["error"] = "The Villa number could not be deleted ";
             return View();
