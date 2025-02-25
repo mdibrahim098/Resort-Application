@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Resort_Application.ViewModels;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
 
@@ -21,14 +22,16 @@ namespace Resort_Application.Controllers
         }
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> list = _db.Villas.ToList().Select(u=>
-            new SelectListItem
+
+            VillaNumberVM villaNumberVM = new()
             {
-                Text = u.Name,
-                Value = u.Id.ToString()
-            });
-            ViewBag.VillaList = list;
-            return View();
+                VillaList = _db.Villas.ToList().Select(u =>new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                })
+            };  
+            return View(villaNumberVM);
         }
 
         [HttpPost]
