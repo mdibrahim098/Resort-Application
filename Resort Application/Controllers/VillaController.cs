@@ -9,10 +9,12 @@ namespace Resort_Application.Controllers
     public class VillaController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public VillaController(IUnitOfWork unitOfWork)
+        public VillaController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -33,6 +35,14 @@ namespace Resort_Application.Controllers
             }
             if (ModelState.IsValid)
             {
+                if (Obj.Image != null)
+                {
+
+                }
+                else
+                {
+                    Obj.ImageUrl = "https://placehold.co/600x400";
+                }
                 _unitOfWork.Villa.Add(Obj);
                 _unitOfWork.Save();
                 TempData["success"] = "The Villa has been created successfully";
