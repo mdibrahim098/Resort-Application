@@ -37,12 +37,19 @@ namespace Resort_Application.Controllers
             {
                 if (Obj.Image != null)
                 {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(Obj.Image.FileName);
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\VillaImage");
+                    using (var fileStream = new FileStream(Path.Combine(imagePath,fileName),FileMode.Create))
+                           Obj.Image.CopyTo(fileStream);
+
+                           Obj.ImageUrl = @"\images\VillaImage\" + fileName;
 
                 }
                 else
                 {
                     Obj.ImageUrl = "https://placehold.co/600x400";
                 }
+
                 _unitOfWork.Villa.Add(Obj);
                 _unitOfWork.Save();
                 TempData["success"] = "The Villa has been created successfully";
