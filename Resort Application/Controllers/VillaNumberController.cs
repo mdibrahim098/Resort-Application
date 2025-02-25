@@ -27,6 +27,7 @@ namespace Resort_Application.Controllers
                 Text = u.Name,
                 Value = u.Id.ToString()
             });
+            ViewData["VillaList"] = list;
             return View();
         }
 
