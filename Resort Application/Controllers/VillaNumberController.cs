@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Resort_Application.ViewModels;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
@@ -17,7 +18,7 @@ namespace Resort_Application.Controllers
         }
         public IActionResult Index()
         {
-            var VillaNumbers = _db.VillaNumbers.ToList();
+            var VillaNumbers = _db.VillaNumbers.Include(u=>u.Villa).ToList();
             return View(VillaNumbers);
         }
         public IActionResult Create()
