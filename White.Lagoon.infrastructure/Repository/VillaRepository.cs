@@ -6,14 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Domain.Entities;
+using White.Lagoon.infrastructure.Data;
 
 namespace White.Lagoon.infrastructure.Repository
 {
     public class VillaRepository : IVillaRepository
     {
+
+        private readonly ApplicationDbContext _db;
+
+        public VillaRepository(ApplicationDbContext db)
+        {
+            _db = db;
+        }
         public void Add(Villa entity)
         {
-            throw new NotImplementedException();
+            _db.Add(entity);
         }
 
         public IEnumerable<Villa> Get(Expression<Func<Villa, bool>>? filter, string? includeProperties = null)
@@ -28,17 +36,17 @@ namespace White.Lagoon.infrastructure.Repository
 
         public void Remove(Villa entity)
         {
-            throw new NotImplementedException();
+            _db.Remove(entity);
         }
 
         public void Save()
         {
-            throw new NotImplementedException();
+            _db.SaveChanges();
         }
 
         public void Update(Villa entity)
         {
-            throw new NotImplementedException();
+            _db.Villas.Update(entity);
         }
     }
 }
