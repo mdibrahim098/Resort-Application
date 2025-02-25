@@ -34,7 +34,7 @@ namespace Resort_Application.Controllers
             if (ModelState.IsValid)
             {
                 _unitOfWork.Villa.Add(Obj);
-                _unitOfWork.Villa.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "The Villa has been created successfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -61,7 +61,7 @@ namespace Resort_Application.Controllers
             if (ModelState.IsValid && Obj.Id>0)
             {
                 _unitOfWork.Villa.Update(Obj);
-                _unitOfWork.Villa.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "The Villa has been updated successfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -85,7 +85,7 @@ namespace Resort_Application.Controllers
             if (objFromDb is not null)
             {
                 _unitOfWork.Villa.Remove(objFromDb);
-                _unitOfWork.Villa.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "The Villa has been deleted successfully";
                 return RedirectToAction(nameof(Index));
             }
