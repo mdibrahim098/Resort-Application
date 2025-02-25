@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
+using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
 
@@ -7,15 +8,15 @@ namespace Resort_Application.Controllers
 {
     public class VillaController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IVillaRepository _VillaRepo;
 
-        public VillaController(ApplicationDbContext db)
+        public VillaController(IVillaRepository villaRepo)
         {
-            _db = db;
+            _VillaRepo = villaRepo;
         }
         public IActionResult Index()
         {
-            var villas = _db.Villas.ToList();
+            var villas = _VillaRepo.GetAll();
             return View(villas);
         }
         public IActionResult Create()
@@ -32,8 +33,8 @@ namespace Resort_Application.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Villas.Add(Obj);
-                _db.SaveChanges();
+                _VillaRepo.Add(Obj);
+                _VillaRepo.Save();
                 TempData["success"] = "The Villa has been created successfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -43,7 +44,7 @@ namespace Resort_Application.Controllers
 
         public IActionResult Update(int villaId)
         {
-            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);
+            Villa? obj = _VillaRepo.Get(u => u.Id == villaId);
             //Villa? obj = _db.Villas.Find(villaId);
             //var VillaList = _db.Villas.Where(u => u.Price > 50 && u.Occupancy > 0);
             if (obj == null)
@@ -59,8 +60,8 @@ namespace Resort_Application.Controllers
             
             if (ModelState.IsValid && Obj.Id>0)
             {
-                _db.Villas.Update(Obj);
-                _db.SaveChanges();
+                _VillaRepo.Update(Obj);
+                _VillaRepo.Save();
                 TempData["success"] = "The Villa has been updated successfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -69,7 +70,7 @@ namespace Resort_Application.Controllers
 
         public IActionResult Delete(int villaId)
         {
-            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);   
+            Villa? obj = _VillaRepo.Get(u => u.Id == villaId);   
             if (obj is null)
             {
                 return RedirectToAction("Error", "Home");
@@ -80,11 +81,11 @@ namespace Resort_Application.Controllers
         [HttpPost]
         public IActionResult Delete(Villa Obj)
         {
-            Villa? objFromDb = _db.Villas.FirstOrDefault(u=> u.Id == Obj.Id);
+            Villa? objFromDb = _VillaRepo.Get(u=> u.Id == Obj.Id);
             if (objFromDb is not null)
             {
-                _db.Villas.Remove(objFromDb);
-                _db.SaveChanges();
+                _VillaRepo.Remove(objFromDb);
+                _VillaRepo.Save();
                 TempData["success"] = "The Villa has been deleted successfully";
                 return RedirectToAction(nameof(Index));
             }
