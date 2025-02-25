@@ -98,28 +98,38 @@ namespace Resort_Application.Controllers
             return View(villaNumberVM);     
         }
 
-        public IActionResult Delete(int villaId)
+        public IActionResult Delete(int villaNumberId)
         {
-            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);   
-            if (obj is null)
+            VillaNumberVM villaNumberVM = new()
+            {
+                VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                VillaNumber = _db.VillaNumbers.FirstOrDefault(u => u.Villa_number == villaNumberId)
+            };
+            if (villaNumberVM.VillaNumber == null)
             {
                 return RedirectToAction("Error", "Home");
             }
-            return View(obj);
+            return View(villaNumberVM);
         }
 
         [HttpPost]
-        public IActionResult Delete(Villa Obj)
+        public IActionResult Delete(VillaNumberVM villaNumberVM)
         {
-            Villa? objFromDb = _db.Villas.FirstOrDefault(u=> u.Id == Obj.Id);
+            VillaNumber? objFromDb = _db.VillaNumbers
+             .FirstOrDefault(u => u.Villa_number == villaNumberVM.VillaNumber.Villa_number);
+
             if (objFromDb is not null)
             {
-                _db.Villas.Remove(objFromDb);
+                _db.VillaNumbers.Remove(objFromDb);
                 _db.SaveChanges();
-                TempData["success"] = "The Villa has been deleted successfully";
+                TempData["success"] = "The Villa number has been deleted successfully";
                 return RedirectToAction("Index");
             }
-            TempData["error"] = "The Villa could not be deleted ";
+            TempData["error"] = "The Villa number could not be deleted ";
             return View();
         }
 
