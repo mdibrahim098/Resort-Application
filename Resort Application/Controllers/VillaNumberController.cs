@@ -80,17 +80,22 @@ namespace Resort_Application.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(Villa Obj)
+        public IActionResult Update(VillaNumberVM villaNumberVM)
         {
-            
-            if (ModelState.IsValid && Obj.Id>0)
+          
+            if (ModelState.IsValid)
             {
-                _db.Villas.Update(Obj);
+                _db.VillaNumbers.Update(villaNumberVM.VillaNumber);
                 _db.SaveChanges();
-                TempData["success"] = "The Villa has been updated successfully";
+                TempData["success"] = "The Villa number has been updated successfully";
                 return RedirectToAction("Index");
             }
-            return View();
+            villaNumberVM.VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+            return View(villaNumberVM);     
         }
 
         public IActionResult Delete(int villaId)
