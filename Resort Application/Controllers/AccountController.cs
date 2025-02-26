@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Resort_Application.ViewModels;
 using White.Lagoon.Application.Common.Interfaces;
+using White.Lagoon.Application.Common.Utility;
 using White.Lagoon.Domain.Entities;
 
 namespace Resort_Application.Controllers
@@ -36,10 +37,10 @@ namespace Resort_Application.Controllers
         }
         public IActionResult Register()
         {
-            if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
-                _roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).Wait();
             }
 
             RegisterVM registerVM = new()
