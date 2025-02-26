@@ -6,7 +6,7 @@ using White.Lagoon.Domain.Entities;
 
 namespace Resort_Application.Controllers
 {
-    public class AccountController1 : Controller
+    public class AccountController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -14,7 +14,7 @@ namespace Resort_Application.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
-        public  AccountController1(IUnitOfWork unitOfWork, 
+        public AccountController(IUnitOfWork unitOfWork, 
                 UserManager<ApplicationUser> userManager, 
                 SignInManager<ApplicationUser> signInManager, 
                 RoleManager<IdentityRole> roleManager)
