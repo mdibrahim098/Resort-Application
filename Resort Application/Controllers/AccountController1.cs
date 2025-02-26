@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Resort_Application.ViewModels;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Domain.Entities;
 
@@ -23,8 +24,13 @@ namespace Resort_Application.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
+            LoginVM loginVM = new()
+            {
+                RedirectUrl = returnUrl
+            };
             return View();
         }
         public IActionResult Register()
