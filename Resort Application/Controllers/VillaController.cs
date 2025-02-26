@@ -120,6 +120,15 @@ namespace Resort_Application.Controllers
             Villa? objFromDb = _unitOfWork.Villa.Get(u=> u.Id == Obj.Id);
             if (objFromDb is not null)
             {
+
+                if (!string.IsNullOrEmpty(objFromDb.ImageUrl))
+                {
+                    var OldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, objFromDb.ImageUrl.TrimStart('\\'));
+                    if (System.IO.File.Exists(OldImagePath))
+                    {
+                        System.IO.File.Delete(OldImagePath);
+                    }
+                }
                 _unitOfWork.Villa.Remove(objFromDb);
                 _unitOfWork.Save();
                 TempData["success"] = "The Villa has been deleted successfully";
