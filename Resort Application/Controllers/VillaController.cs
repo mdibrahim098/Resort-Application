@@ -77,6 +77,25 @@ namespace Resort_Application.Controllers
             
             if (ModelState.IsValid && Obj.Id>0)
             {
+
+                if (Obj.Image != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(Obj.Image.FileName);
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\VillaImage");
+                    if (!string.IsNullOrEmpty(Obj.ImageUrl))
+                    {
+                        var OldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, Obj.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(OldImagePath))
+                        {
+                            System.IO.File.Delete(OldImagePath);
+                        }
+                    }
+                    using (var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create))
+                        Obj.Image.CopyTo(fileStream);
+
+                    Obj.ImageUrl = @"\images\VillaImage\" + fileName;
+
+                }
                 _unitOfWork.Villa.Update(Obj);
                 _unitOfWork.Save();
                 TempData["success"] = "The Villa has been updated successfully";
