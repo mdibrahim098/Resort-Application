@@ -120,7 +120,7 @@ namespace Resort_Application.Controllers
                 if (result.Succeeded)
                 {
              
-                    if (!string.IsNullOrEmpty(loginVM.RedirectUrl))
+                    if (string.IsNullOrEmpty(loginVM.RedirectUrl))
                     {
                         return RedirectToAction("Index", "Home");
                     }
