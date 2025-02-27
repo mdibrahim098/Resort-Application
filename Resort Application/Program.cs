@@ -24,6 +24,11 @@ builder.Services.ConfigureApplicationCookie(options =>
     
 });
 
+builder.Services.Configure<IdentityOptions>(option =>
+{
+    option.Password.RequiredLength = 6;
+});
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 
