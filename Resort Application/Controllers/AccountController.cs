@@ -22,14 +22,15 @@ namespace Resort_Application.Controllers
                 SignInManager<ApplicationUser> signInManager, 
                 RoleManager<IdentityRole> roleManager)
         {
+            _roleManager = roleManager;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
+           
         }
         public IActionResult Login(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl??= Url.Content("~/");
             LoginVM loginVM = new()
             {
                 RedirectUrl = returnUrl
@@ -82,14 +83,15 @@ namespace Resort_Application.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, SD.Role_Customer);
                 }
+
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                if(!string.IsNullOrEmpty(registerVM.RedirectUrl))
+                if(string.IsNullOrEmpty(registerVM.RedirectUrl))
                 {
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    return LocalRedirect(registerVM.RedirectUrl);
+                   return LocalRedirect(registerVM.RedirectUrl);
                 }
             }
 

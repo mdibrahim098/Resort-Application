@@ -29,7 +29,7 @@ namespace Resort_Application.ViewModels
         public string? Role { get; set; }
 
         [ValidateNever]
-        public IEnumerable<SelectListItem> RoleList { get; set; }
+        public IEnumerable<SelectListItem>? RoleList { get; set; }
 
     }
 }
