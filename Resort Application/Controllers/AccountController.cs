@@ -43,6 +43,12 @@ namespace Resort_Application.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index","Home");
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         public IActionResult Register()
         {
             if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
