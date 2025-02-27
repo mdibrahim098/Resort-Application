@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Domain.Entities;
@@ -6,6 +7,7 @@ using White.Lagoon.infrastructure.Data;
 
 namespace Resort_Application.Controllers
 {
+    [Authorize]
     public class VillaController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

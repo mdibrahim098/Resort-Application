@@ -1,14 +1,17 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Resort_Application.ViewModels;
 using White.Lagoon.Application.Common.Interfaces;
+using White.Lagoon.Application.Common.Utility;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
 
 namespace Resort_Application.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class AmenityController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
