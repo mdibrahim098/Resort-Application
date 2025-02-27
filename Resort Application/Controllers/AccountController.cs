@@ -70,7 +70,7 @@ namespace Resort_Application.Controllers
                 CreateAt = DateTime.Now 
             };
 
-            var result = await _userManager.CreateAsync(user, registerVM.Password);
+             var result = await _userManager.CreateAsync(user, registerVM.Password);
            
             if(result.Succeeded)
             {
