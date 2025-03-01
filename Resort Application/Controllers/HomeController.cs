@@ -56,7 +56,7 @@ namespace Resort_Application.Controllers
                 VillaList = villaList,
                 Nights = nights
             };
-            return View(homeVM);
+            return PartialView("_VillaList", homeVM);
         }
 
         public IActionResult Privacy()
