@@ -48,6 +48,7 @@ namespace Resort_Application.Controllers
 
           var villa = _unitOfWork.Villa.Get(u => u.Id == booking.VillaId);
             booking.TotalCost = villa.Price * booking.Nights;
+
             booking.Status = SD.StatusPending;
             booking.BookingDate = DateTime.Now;
 

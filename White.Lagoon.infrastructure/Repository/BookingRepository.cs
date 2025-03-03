@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using White.Lagoon.Application.Common.Interfaces;
+using White.Lagoon.Application.Common.Utility;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
 
@@ -24,5 +25,40 @@ namespace White.Lagoon.infrastructure.Repository
         {
             _db.Bookings.Update(entity);
         }
+
+        public void UpdateStatus(int bookingId, string bookingStatus)
+        {
+           var bookingFromnDb = _db.Bookings.FirstOrDefault(b => b.Id == bookingId);
+            if (bookingFromnDb != null)
+            {
+                bookingFromnDb.Status = bookingStatus;
+                if (bookingStatus == SD.StatusCheckedIn)
+                {
+                    bookingFromnDb.ActualCheckInDate = DateTime.Now;
+                }
+                if(bookingStatus == SD.StatusCompleted)
+                {
+                    bookingFromnDb.ActualCheckOutDate = DateTime.Now;
+                } 
+            }
+        }
+
+        public void UpdateStripePaymentID(int bookingId, string sessionId, string paymentIntentId)
+        {
+            var bookingFromnDb = _db.Bookings.FirstOrDefault(b => b.Id == bookingId);
+            if (bookingFromnDb != null)
+            {
+                if(!string.IsNullOrEmpty(sessionId))
+                {
+                    bookingFromnDb.StripeSessionId = sessionId;
+                }
+                if (!string.IsNullOrEmpty(paymentIntentId))
+                {
+                    bookingFromnDb.StripePaymentIntentId = paymentIntentId;
+                    bookingFromnDb.PaymentDate = DateTime.Now;
+                    bookingFromnDb.IsPaymentSuccessful = true;
+                }
+            }
+         }
     }
 }
