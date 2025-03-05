@@ -1,9 +1,15 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
+using Stripe.BillingPortal;
+using Stripe.Checkout;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Application.Common.Utility;
 using White.Lagoon.Domain.Entities;
+using Session = Stripe.Checkout.Session;
+using SessionService = Stripe.Checkout.SessionService;
+
 
 namespace Resort_Application.Controllers
 {
@@ -46,7 +52,7 @@ namespace Resort_Application.Controllers
         public IActionResult FinalizeBooking(Booking booking)
         {
 
-          var villa = _unitOfWork.Villa.Get(u => u.Id == booking.VillaId);
+            var villa = _unitOfWork.Villa.Get(u => u.Id == booking.VillaId);
             booking.TotalCost = villa.Price * booking.Nights;
 
             booking.Status = SD.StatusPending;
@@ -54,7 +60,40 @@ namespace Resort_Application.Controllers
 
             _unitOfWork.Booking.Add(booking);
             _unitOfWork.Save();
-            return RedirectToAction(nameof(BookingConfirmation), new {bookingId = booking.Id});
+
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = domain + $"/Booking/BookingConfirmation?bookingId={booking.Id}",
+                CancelUrl = domain + $"/Booking/FinalizeBooking?villaId={booking.VillaId}&checkInDate={booking.CheckInDate}&nights={booking.Nights}",
+            };
+            
+            options.LineItems.Add(new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = (long)booking.TotalCost * 100,
+                    Currency = "usd",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = villa.Name,
+                        //Images = new List<string> { villa.ImageUrl },
+                    },
+                },
+                Quantity = 1,
+            });
+           
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
+
+           
         }
 
         [Authorize]
