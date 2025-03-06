@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="card-body border p-4">
-		<table class="table table-bordered table-striped">
+		<table id="tblBookings" class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -20,8 +20,6 @@
 					<th>Status</th>
 					<th>Check In Date</th>
 					<th>Nights</th>
-					<th>Total</th>
-					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,4 +30,7 @@
 	</div>
 </div>
 
+@section Scripts {
+	<script src="~/js/booking.js"></script>
+}
 
