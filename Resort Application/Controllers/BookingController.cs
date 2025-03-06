@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
@@ -25,7 +26,6 @@ namespace Resort_Application.Controllers
         {
             return View();
         }
-
 
 
         [Authorize]
@@ -129,6 +129,37 @@ namespace Resort_Application.Controllers
 
             return View(bookingid);
         }
+
+
+
+
+        #region Api calls
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Getall()
+        {
+            IEnumerable<Booking> objbookings;
+
+            if (User.IsInRole(SD.Role_Admin))
+            {
+                objbookings = _unitOfWork.Booking.GetAll(includeProperties: "User,Villa");
+
+            }
+            else
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                objbookings = _unitOfWork.Booking
+                    .GetAll(u => u.UserId == userId,includeProperties: "User,Villa");
+                 
+            }
+
+            return Json(new { data = objbookings });
+        }
+
+        #endregion
 
 
     }
