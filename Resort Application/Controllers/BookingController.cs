@@ -101,6 +101,24 @@ namespace Resort_Application.Controllers
         [Authorize]
         public IActionResult BookingConfirmation(int bookingid)
         {
+            Booking bookingFromDb = _unitOfWork.Booking.Get(u => u.Id == bookingid,
+            includeProperties: "User,Villa");
+
+            if(bookingFromDb.Status == SD.StatusPending)
+            {
+                // this is a pending order, we need to confirm if payment was successful
+
+                var service = new SessionService();
+                Session session = service.Get(bookingFromDb.StripeSessionId);
+
+                if(session.PaymentStatus == "paid")
+                {
+                    _unitOfWork.Booking.UpdateStatus(bookingFromDb.Id, SD.StatusApproved);
+                    _unitOfWork.Booking.UpdateStripePaymentID(bookingFromDb.Id, session.Id, session.PaymentIntentId);
+                    _unitOfWork.Save();
+                }
+            }
+
             return View(bookingid);
         }
 
