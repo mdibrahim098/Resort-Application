@@ -22,6 +22,7 @@ namespace Resort_Application.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -133,11 +134,11 @@ namespace Resort_Application.Controllers
 
 
 
-        #region Api calls
+        #region Api Calls
 
         [HttpGet]
         [Authorize]
-        public IActionResult Getall()
+        public IActionResult GetAll()
         {
             IEnumerable<Booking> objbookings;
 
@@ -155,7 +156,7 @@ namespace Resort_Application.Controllers
                     .GetAll(u => u.UserId == userId,includeProperties: "User,Villa");
                  
             }
-
+           
             return Json(new { data = objbookings });
         }
 
