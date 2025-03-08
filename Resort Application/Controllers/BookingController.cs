@@ -138,7 +138,7 @@ namespace Resort_Application.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string status)
         {
             IEnumerable<Booking> objbookings;
 
@@ -156,7 +156,10 @@ namespace Resort_Application.Controllers
                     .GetAll(u => u.UserId == userId,includeProperties: "User,Villa");
                  
             }
-           
+            if (!string.IsNullOrEmpty(status))
+            {
+                objbookings = objbookings.Where(u => u.Status.ToLower().Equals(status.ToLower()));
+            }
             return Json(new { data = objbookings });
         }
 
