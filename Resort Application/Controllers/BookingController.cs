@@ -131,7 +131,14 @@ namespace Resort_Application.Controllers
             return View(bookingid);
         }
 
+        [Authorize]
+        public IActionResult BookingDetails( int bookingId)
+        {
+            Booking bookingFromDb = _unitOfWork.Booking.Get(u => u.Id == bookingId,
+                     includeProperties: "User,Villa");
 
+            return View(bookingFromDb);
+        }
 
 
         #region Api Calls
