@@ -58,5 +58,7 @@ namespace White.Lagoon.Domain.Entities
         public DateTime ActualCheckOutDate { get; set; }
 
         public int VillaNumber { get; set; }
+
+        public List<VillaNumber> VillaNumbers { get; set; }
     }
 }

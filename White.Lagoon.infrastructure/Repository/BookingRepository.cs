@@ -26,7 +26,7 @@ namespace White.Lagoon.infrastructure.Repository
             _db.Bookings.Update(entity);
         }
 
-        public void UpdateStatus(int bookingId, string bookingStatus)
+        public void UpdateStatus(int bookingId, string bookingStatus, int villaNumber=0)
         {
            var bookingFromnDb = _db.Bookings.FirstOrDefault(b => b.Id == bookingId);
             if (bookingFromnDb != null)
@@ -34,6 +34,7 @@ namespace White.Lagoon.infrastructure.Repository
                 bookingFromnDb.Status = bookingStatus;
                 if (bookingStatus == SD.StatusCheckedIn)
                 {
+                    bookingFromnDb.VillaNumber = villaNumber;
                     bookingFromnDb.ActualCheckInDate = DateTime.Now;
                 }
                 if(bookingStatus == SD.StatusCompleted)
