@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Resort_Application.ViewModels;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Application.Common.Utility;
 
@@ -30,8 +31,20 @@ namespace Resort_Application.Controllers
             var countByPreviousMonth = totalBookings.Count(u => u.BookingDate >= previousMonthStartDate
              && u.BookingDate <= currentMonthStartDate);
 
+            RadialBarChartVM radialBarChartVM = new();
 
+            int increaseDrercreaseRatio = 100;
+            if (countByPreviousMonth != 0)
+            {
+                increaseDrercreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / countByPreviousMonth * 100);
+            }
 
+            radialBarChartVM.TotalCount = totalBookings.Count();
+            radialBarChartVM.CountInCurrentMonth = countByCurrentMonth;
+            radialBarChartVM.HasRatioIncreased = currentMonthStartDate > previousMonthStartDate;
+            radialBarChartVM.Series = new int[] { increaseDrercreaseRatio };
+
+            return Json(radialBarChartVM);
         }
 
 
