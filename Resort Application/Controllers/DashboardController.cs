@@ -46,6 +46,22 @@ namespace Resort_Application.Controllers
             return Json(GetRadialChartDataModel(totalUser.Count(), countByCurrentMonth, countByPreviousMonth));
         }
 
+        public async Task<IActionResult> GetRevenuedUserChartDataAsync()
+        {
+            var totalBookings = _unitOfWork.Booking.GetAll(u => u.Status != SD.StatusPending
+           || u.Status == SD.StatusCancelled);
+
+            var totalRevenue =Convert.ToInt32(totalBookings.Sum(u => u.TotalCost));
+
+            var countByCurrentMonth = totalBookings.Where(u => u.BookingDate >= currentMonthStartDate
+           && u.BookingDate <= DateTime.Now).Sum(u=>u.TotalCost);
+
+            var countByPreviousMonth = totalBookings.Where(u => u.BookingDate >= previousMonthStartDate
+             && u.BookingDate <= currentMonthStartDate).Sum(u => u.TotalCost);
+
+            return Json(GetRadialChartDataModel(totalRevenue, countByCurrentMonth, countByPreviousMonth));
+        }
+
         private static RadialBarChartVM GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
         {
             RadialBarChartVM radialBarChartVM = new();
