@@ -31,22 +31,37 @@ namespace Resort_Application.Controllers
             var countByPreviousMonth = totalBookings.Count(u => u.BookingDate >= previousMonthStartDate
              && u.BookingDate <= currentMonthStartDate);
 
+            return Json(GetRadialChartDataModel(totalBookings.Count(), countByCurrentMonth, countByPreviousMonth));
+        }
+        public async Task<IActionResult> GetRegisteredUserChartDataAsync()
+        {
+            var totalUser = _unitOfWork.User.GetAll();
+
+            var countByCurrentMonth = totalUser.Count(u => u.CreateAt >= currentMonthStartDate
+            && u.CreateAt <= DateTime.Now);
+
+            var countByPreviousMonth = totalUser.Count(u => u.CreateAt >= previousMonthStartDate
+             && u.CreateAt <= currentMonthStartDate);
+
+            return Json(GetRadialChartDataModel(totalUser.Count(), countByCurrentMonth, countByPreviousMonth));
+        }
+
+        private static RadialBarChartVM GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
+        {
             RadialBarChartVM radialBarChartVM = new();
 
             int increaseDrercreaseRatio = 100;
-            if (countByPreviousMonth != 0)
+            if (prevMonthCount != 0)
             {
-                increaseDrercreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / countByPreviousMonth * 100);
+                increaseDrercreaseRatio = Convert.ToInt32((currentMonthCount - prevMonthCount) / prevMonthCount * 100);
             }
 
-            radialBarChartVM.TotalCount = totalBookings.Count();
-            radialBarChartVM.CountInCurrentMonth = countByCurrentMonth;
-            radialBarChartVM.HasRatioIncreased = currentMonthStartDate > previousMonthStartDate;
+            radialBarChartVM.TotalCount = totaCount;
+            radialBarChartVM.CountInCurrentMonth = Convert.ToInt32(currentMonthCount);
+            radialBarChartVM.HasRatioIncreased = currentMonthCount > prevMonthCount;
             radialBarChartVM.Series = new int[] { increaseDrercreaseRatio };
-
-            return Json(radialBarChartVM);
+            return radialBarChartVM;
         }
-
 
 
     }
