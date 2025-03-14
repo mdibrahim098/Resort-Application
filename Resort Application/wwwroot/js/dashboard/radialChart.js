@@ -2,7 +2,7 @@
     var chartColors = getChartColorsArray(id);
     var options = {
         fill: {
-            color: chartColors
+            colors: chartColors
         },
         chart: {
             height: 90,

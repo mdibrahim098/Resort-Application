@@ -33,7 +33,7 @@ namespace Resort_Application.Controllers
 
             return Json(GetRadialChartDataModel(totalBookings.Count(), countByCurrentMonth, countByPreviousMonth));
         }
-        public async Task<IActionResult> GetRegisteredUserChartDataAsync()
+        public async Task<IActionResult> GetRegisteredUserChartData()
         {
             var totalUser = _unitOfWork.User.GetAll();
 
@@ -46,7 +46,7 @@ namespace Resort_Application.Controllers
             return Json(GetRadialChartDataModel(totalUser.Count(), countByCurrentMonth, countByPreviousMonth));
         }
 
-        public async Task<IActionResult> GetRevenuedUserChartDataAsync()
+        public async Task<IActionResult> GetRevenuedUserChartData()
         {
             var totalBookings = _unitOfWork.Booking.GetAll(u => u.Status != SD.StatusPending
            || u.Status == SD.StatusCancelled);
