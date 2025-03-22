@@ -81,6 +81,28 @@ namespace Resort_Application.Controllers
 
             return Json(pieChartVM);
         }
+        public async Task<IActionResult> GetMemberAndBookingLineChartData()
+        {
+            var bookingData = _unitOfWork.Booking.GetAll(u => u.BookingDate >= DateTime.Now.AddDays(-30) &&
+            u.BookingDate.Date <= DateTime.Now)
+            .GroupBy(b => b.BookingDate.Date)
+            .Select(u => new
+            {
+                Datetime = u.Key,
+                NewBookingCount = u.Count()
+            });
+
+            var customerData = _unitOfWork.User.GetAll(u => u.CreateAt >= DateTime.Now.AddDays(-30) &&
+            u.CreateAt.Date <= DateTime.Now)
+            .GroupBy(b => b.CreateAt.Date)
+            .Select(u => new
+            {
+                Datetime = u.Key,
+                NewCustomerCount = u.Count()
+            });
+
+            return Json(bookingData);
+        }
         private static RadialBarChartVM GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
         {
             RadialBarChartVM radialBarChartVM = new();
