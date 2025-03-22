@@ -1,12 +1,12 @@
 ﻿
 
 $(document).ready(function () {
-    loadCustomerBookingPieChart();
+    loadCustomerAndBookingLineChart();
 
 });
 
 
-function loadCustomerBookingPieChart() {
+function loadCustomerAndBookingLineChart() {
     $(".chart-spiner").show();
 
     $.ajax({
@@ -33,17 +33,39 @@ function loadLineChart(id,data) {
             type: 'line',
         },
         stroke: {
-            show: false
+            curve: 'smooth',
+            width : 2
         },
         markers: {
-            size: 0,
+            size: 3,
+            stokeWidth : 0,
             hover: {
-                sizeOffset: 6
+                size : 7
             }
         },
         xaxis: {
             categories: data.categories,
+            labels: {
+                style: {
+                    colors: "#ddd",
+                },
+            },
         },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: "#fff",
+                },
+            },
+        },
+        legend: {
+            labels: {
+                colors: "#fff",
+            },
+        },
+        tooltip: {
+            theme: 'dark',
+        }
     };
     var chart = new ApexCharts(document.querySelector("#" + id), options);
     chart.render();
