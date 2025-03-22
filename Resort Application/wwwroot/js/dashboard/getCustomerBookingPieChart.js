@@ -1,12 +1,12 @@
 ﻿
 
 $(document).ready(function () {
-    getCustomerBookingPieChart();
+    loadCustomerBookingPieChart();
 
 });
 
 
-function getCustomerBookingPieChart() {
+function loadCustomerBookingPieChart() {
     $(".chart-spiner").show();
 
     $.ajax({
@@ -14,6 +14,7 @@ function getCustomerBookingPieChart() {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
+            console.log("Pie Chart Data:", data);
             loadPieChart("customerBookingsPieChart", data);
 
             $(".chart-spiner").hide();

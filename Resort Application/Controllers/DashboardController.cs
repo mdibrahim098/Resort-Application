@@ -67,6 +67,7 @@ namespace Resort_Application.Controllers
         {
             var totalBookings = _unitOfWork.Booking.GetAll(u => u.BookingDate >= DateTime.Now.AddDays(-30) &&
             (u.Status == SD.StatusCancelled || u.Status == SD.StatusCancelled ));
+           
             var customerWithOneBooking = totalBookings.GroupBy(b => b.UserId).Where(x => x.Count() == 1).Select(x => x.Key).ToList();
 
             int bookingsByNewCustomer = customerWithOneBooking.Count();
@@ -75,7 +76,7 @@ namespace Resort_Application.Controllers
             PieChartVM pieChartVM = new()
             {
                 Labels = new string[] {"New Customer Bookings","returning Customer Bookings"},
-                Seriecs = new decimal[] {bookingsByNewCustomer, bookingByReturingCustomer}
+                Series = new decimal[] {bookingsByNewCustomer, bookingByReturingCustomer}
             };
 
             return Json(pieChartVM);
