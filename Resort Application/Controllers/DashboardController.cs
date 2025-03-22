@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Resort_Application.ViewModels;
+using Stripe;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Application.Common.Utility;
 
@@ -101,7 +102,53 @@ namespace Resort_Application.Controllers
                 NewCustomerCount = u.Count()
             });
 
-            return Json(bookingData);
+            var leftJoin = bookingData.GroupJoin(customerData, booking => booking.Datetime,customer => customer.Datetime,
+                (booking,customer)=> new
+                {
+                    booking.Datetime,
+                    booking.NewBookingCount,
+                    NewCustomerCount = customer.Select(x => x.NewCustomerCount).FirstOrDefault()
+                });
+
+            var rightJoin = customerData.GroupJoin(bookingData, customer => customer.Datetime, booking => booking.Datetime,
+                (customer,booking) => new
+                {
+                    customer.Datetime,
+                    NewBookingCount = booking.Select(x =>x.NewBookingCount).FirstOrDefault(),
+                    customer.NewCustomerCount
+                });
+
+            var margeData = leftJoin.Union(rightJoin).OrderBy(x => x.Datetime).ToList();
+
+            var newBookingData = margeData.Select(x => x.NewBookingCount).ToArray();
+            var newCustomerData = margeData.Select(x => x.NewCustomerCount).ToArray();
+            var categories = margeData.Select(x => x.Datetime.ToString("MM/dd/yyyy")).ToArray();
+
+            List<ChartData> chartDataList = new()
+            {
+                new ChartData
+                {
+                    Name = "New Booking",
+                    Data = newBookingData
+                },
+                new ChartData
+                {
+                    Name = "New Members",
+                    Data = newCustomerData
+                }
+
+            };
+
+            LineChartVM lineChartVM = new()
+            {
+                Categories = categories,
+                Series = chartDataList
+            };
+
+
+
+
+            return Json(lineChartVM);
         }
         private static RadialBarChartVM GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
         {
