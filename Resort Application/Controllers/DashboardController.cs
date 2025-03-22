@@ -62,6 +62,24 @@ namespace Resort_Application.Controllers
             return Json(GetRadialChartDataModel(totalRevenue, countByCurrentMonth, countByPreviousMonth));
         }
 
+
+        public async Task<IActionResult> GetBookingPieChartData()
+        {
+            var totalBookings = _unitOfWork.Booking.GetAll(u => u.BookingDate >= DateTime.Now.AddDays(-30) &&
+            (u.Status == SD.StatusCancelled || u.Status == SD.StatusCancelled ));
+            var customerWithOneBooking = totalBookings.GroupBy(b => b.UserId).Where(x => x.Count() == 1).Select(x => x.Key).ToList();
+
+            int bookingsByNewCustomer = customerWithOneBooking.Count();
+            int bookingByReturingCustomer = totalBookings.Count() - bookingsByNewCustomer;
+
+            PieChartVM pieChartVM = new()
+            {
+                Labels = new string[] {"New Customer Bookings","returning Customer Bookings"},
+                Seriecs = new decimal[] {bookingsByNewCustomer, bookingByReturingCustomer}
+            };
+
+            return Json(pieChartVM);
+        }
         private static RadialBarChartVM GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
         {
             RadialBarChartVM radialBarChartVM = new();
