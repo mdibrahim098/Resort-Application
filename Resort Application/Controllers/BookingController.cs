@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Stripe.BillingPortal;
 using Stripe.Checkout;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
+using Syncfusion.DocIORenderer;
 using White.Lagoon.Application.Common.Interfaces;
 using White.Lagoon.Application.Common.Utility;
 using White.Lagoon.Domain.Entities;
@@ -17,9 +20,12 @@ namespace Resort_Application.Controllers
     public class BookingController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public BookingController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BookingController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            this._webHostEnvironment = webHostEnvironment;
+
         }
 
         [Authorize]
@@ -30,7 +36,7 @@ namespace Resort_Application.Controllers
 
 
         [Authorize]
-        public IActionResult FinalizeBooking(int villaId,DateOnly checkInDate,int nights)
+        public IActionResult FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
         {
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -71,8 +77,8 @@ namespace Resort_Application.Controllers
             var bookedVillas = _unitOfWork.Booking.GetAll(u => u.Status == SD.StatusApproved ||
             u.Status == SD.StatusCheckedIn).ToList();
 
-                int roomAvailable = SD.VillaRoomsAvailable_Count(villa.Id,
-                    villaNumberList, booking.CheckInDate, booking.Nights, bookedVillas);
+            int roomAvailable = SD.VillaRoomsAvailable_Count(villa.Id,
+                villaNumberList, booking.CheckInDate, booking.Nights, bookedVillas);
 
             if (roomAvailable == 0)
             {
@@ -100,7 +106,7 @@ namespace Resort_Application.Controllers
                 SuccessUrl = domain + $"Booking/BookingConfirmation?bookingId={booking.Id}",
                 CancelUrl = domain + $"Booking/FinalizeBooking?villaId={booking.VillaId}&checkInDate={booking.CheckInDate}&nights={booking.Nights}",
             };
-            
+
             options.LineItems.Add(new SessionLineItemOptions
             {
                 PriceData = new SessionLineItemPriceDataOptions
@@ -115,7 +121,7 @@ namespace Resort_Application.Controllers
                 },
                 Quantity = 1,
             });
-           
+
 
             var service = new SessionService();
             Session session = service.Create(options);
@@ -125,7 +131,7 @@ namespace Resort_Application.Controllers
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
 
-           
+
         }
 
         [Authorize]
@@ -134,16 +140,16 @@ namespace Resort_Application.Controllers
             Booking bookingFromDb = _unitOfWork.Booking.Get(u => u.Id == bookingid,
             includeProperties: "User,Villa");
 
-            if(bookingFromDb.Status == SD.StatusPending)
+            if (bookingFromDb.Status == SD.StatusPending)
             {
                 // this is a pending order, we need to confirm if payment was successful
 
                 var service = new SessionService();
                 Session session = service.Get(bookingFromDb.StripeSessionId);
 
-                if(session.PaymentStatus == "paid")
+                if (session.PaymentStatus == "paid")
                 {
-                    _unitOfWork.Booking.UpdateStatus(bookingFromDb.Id, SD.StatusApproved,0);
+                    _unitOfWork.Booking.UpdateStatus(bookingFromDb.Id, SD.StatusApproved, 0);
                     _unitOfWork.Booking.UpdateStripePaymentID(bookingFromDb.Id, session.Id, session.PaymentIntentId);
                     _unitOfWork.Save();
                 }
@@ -153,12 +159,12 @@ namespace Resort_Application.Controllers
         }
 
         [Authorize]
-        public IActionResult BookingDetails( int bookingId)
+        public IActionResult BookingDetails(int bookingId)
         {
 
             Booking bookingFromDb = _unitOfWork.Booking.Get(u => u.Id == bookingId,
                      includeProperties: "User,Villa");
-            if (bookingFromDb.VillaNumber ==0 && bookingFromDb.Status==SD.StatusApproved)
+            if (bookingFromDb.VillaNumber == 0 && bookingFromDb.Status == SD.StatusApproved)
             {
                 var availableVillaNumber = AssignAvailableVillaNumberByVilla(bookingFromDb.VillaId);
 
@@ -169,6 +175,37 @@ namespace Resort_Application.Controllers
 
             return View(bookingFromDb);
         }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult GenerateInvoice(int id)
+        {
+            string basePath = _webHostEnvironment.WebRootPath;
+            WordDocument document = new WordDocument();
+
+            // Loading the template
+            string dataPath = basePath + @"/exports/BookingDetails.docx";
+            using FileStream fileStream = new(dataPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            document.Open(fileStream, FormatType.Automatic);
+
+            //Update the template
+
+             Booking bookingFormDb = _unitOfWork.Booking.Get(u => u.Id == id,
+                includeProperties: "User,Villa");
+            TextSelection textSelection = document.Find("xx_customer_name", false, true);
+            WTextRange textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.Name;
+
+            using DocIORenderer renderer = new();
+
+            MemoryStream stream = new();
+            document.Save(stream, FormatType.Docx);
+            stream.Position = 0;
+
+            return File(stream, "application/docx", "BookingDetails.docx");
+
+        }
+
 
         [HttpPost]
         [Authorize(Roles =SD.Role_Admin)]
