@@ -192,9 +192,40 @@ namespace Resort_Application.Controllers
 
              Booking bookingFormDb = _unitOfWork.Booking.Get(u => u.Id == id,
                 includeProperties: "User,Villa");
+           
             TextSelection textSelection = document.Find("xx_customer_name", false, true);
             WTextRange textRange = textSelection.GetAsOneRange();
             textRange.Text = bookingFormDb.Name;
+
+            textSelection = document.Find("xx_customer_phone", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.Phone;
+
+            textSelection = document.Find("xx_customer_email", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.Email;
+
+            textSelection = document.Find("XX_BOOKING_NUMBER", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = "BOOKING ID - " + bookingFormDb.Id;
+            textSelection = document.Find("XX_BOOKING_DATE", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = "BOOKING DATE - " + bookingFormDb.BookingDate.ToShortDateString();
+
+
+            textSelection = document.Find("xx_payment_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.PaymentDate.ToShortDateString();
+            textSelection = document.Find("xx_checkin_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.CheckInDate.ToShortDateString();
+            textSelection = document.Find("xx_checkout_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.CheckOutDate.ToShortDateString();
+            textSelection = document.Find("xx_booking_total", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = bookingFormDb.TotalCost.ToString("c");
+
 
             using DocIORenderer renderer = new();
 
