@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Resort_Application.ViewModels;
 using White.Lagoon.Domain.Entities;
 
 namespace White.Lagoon.Application.Common.Utility
@@ -58,7 +59,22 @@ namespace White.Lagoon.Application.Common.Utility
 
         }
 
+        public static RadialBarChartDto GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
+        {
+            RadialBarChartDto radialBarChartVM = new();
 
+            int increaseDrercreaseRatio = 100;
+            if (prevMonthCount != 0)
+            {
+                increaseDrercreaseRatio = Convert.ToInt32((currentMonthCount - prevMonthCount) / prevMonthCount * 100);
+            }
+
+            radialBarChartVM.TotalCount = totaCount;
+            radialBarChartVM.CountInCurrentMonth = Convert.ToInt32(currentMonthCount);
+            radialBarChartVM.HasRatioIncreased = currentMonthCount > prevMonthCount;
+            radialBarChartVM.Series = new int[] { increaseDrercreaseRatio };
+            return radialBarChartVM;
+        }
 
 
 
