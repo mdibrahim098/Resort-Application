@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Syncfusion.Licensing;
 using White.Lagoon.Application.Common.Interfaces;
+using White.Lagoon.Application.Services.Implementation;
+using White.Lagoon.Application.Services.Interface;
 using White.Lagoon.Domain.Entities;
 using White.Lagoon.infrastructure.Data;
 using White.Lagoon.infrastructure.Repository;
@@ -32,6 +34,7 @@ builder.Services.Configure<IdentityOptions>(option =>
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 var app = builder.Build();
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
