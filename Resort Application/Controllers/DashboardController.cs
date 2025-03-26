@@ -74,7 +74,7 @@ namespace Resort_Application.Controllers
             int bookingsByNewCustomer = customerWithOneBooking.Count();
             int bookingByReturingCustomer = totalBookings.Count() - bookingsByNewCustomer;
 
-            PieChartVM pieChartVM = new()
+            PieChartDto pieChartVM = new()
             {
                 Labels = new string[] {"New Customer Bookings","returning Customer Bookings"},
                 Series = new decimal[] {bookingsByNewCustomer, bookingByReturingCustomer}
@@ -139,7 +139,7 @@ namespace Resort_Application.Controllers
 
             };
 
-            LineChartVM lineChartVM = new()
+            LineChartDto lineChartVM = new()
             {
                 Categories = categories,
                 Series = chartDataList
@@ -150,9 +150,9 @@ namespace Resort_Application.Controllers
 
             return Json(lineChartVM);
         }
-        private static RadialBarChartVM GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
+        private static RadialBarChartDto GetRadialChartDataModel(int totaCount, double currentMonthCount, double prevMonthCount)
         {
-            RadialBarChartVM radialBarChartVM = new();
+            RadialBarChartDto radialBarChartVM = new();
 
             int increaseDrercreaseRatio = 100;
             if (prevMonthCount != 0)
