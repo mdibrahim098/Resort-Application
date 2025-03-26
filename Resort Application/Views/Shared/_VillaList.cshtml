@@ -1,6 +1,6 @@
 ﻿  @model HomeVM      
 
-          <div id="VillasList">
+<div id="VillasList">
             <div class="row px-lg-5 m-lg-4 m-sm-0 px-sm-0" style="--bs-gutter-x:0">
 
                 @foreach (var villa in Model.VillaList)
@@ -79,6 +79,10 @@
                                 </div>
 
                                 <div class="modal-footer">
+                                    <button asp-controller="Home" asp-action="GereratePPTExport"
+                                    aso-route-id="@villa.Id" type="submit"class="btn btn-outline-warning" >
+                                   <i class="bi bi-file-earmark-ppt"></i> Download Villa PPT
+                                    </button>
                                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
                                 </div>
 
@@ -87,4 +91,4 @@
                     </div>
                 }
             </div>
-        </div>s
+        </div>
