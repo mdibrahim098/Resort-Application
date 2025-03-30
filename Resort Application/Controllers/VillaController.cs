@@ -60,7 +60,6 @@ namespace Resort_Application.Controllers
             return View();
         }
 
-
         public IActionResult Update(int villaId)
         {
             Villa? obj = _unitOfWork.Villa.Get(u => u.Id == villaId);
