@@ -14,12 +14,17 @@ namespace White.Lagoon.Application.Services.Implementation
     {
 
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public VillaNumberService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+
+        public bool CheckVillaNumberExists(int villa_number)
+        {
+           return _unitOfWork.VillaNumber.Any(u => u.Villa_number == villa_number);
+        }
+
         public void CreateVillaNumber(VillaNumber villaNumber)
         {
             _unitOfWork.VillaNumber.Add(villaNumber);
@@ -51,12 +56,12 @@ namespace White.Lagoon.Application.Services.Implementation
 
         public IEnumerable<VillaNumber> GetAllVillaNumbers()
         {
-            return _unitOfWork.VillaNumber.GetAll();
+            return _unitOfWork.VillaNumber.GetAll(includeProperties: "Villa");
         }
 
         public VillaNumber GetVillaNumberById(int id)
         {
-            return _unitOfWork.VillaNumber.Get(u => u.Villa_number == id);
+            return _unitOfWork.VillaNumber.Get(u => u.Villa_number == id, includeProperties: "Villa");
         }
 
         public void UpdateVillaNumber(VillaNumber villaNumber)
