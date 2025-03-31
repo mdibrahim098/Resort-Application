@@ -55,7 +55,11 @@ namespace White.Lagoon.Application.Services.Implementation
             return _unitOfWork.Booking.Get(u => u.Id == BookingId, includeProperties: "User,Villa");
         }
 
-
+        public IEnumerable<int> GetCheckedInVillaNumbers(int villaId)
+        {
+            return _unitOfWork.Booking.GetAll(u => u.VillaId == villaId && u.Status == SD.StatusCheckedIn)
+                .Select(u => u.VillaNumber);
+        }
 
         public void UpdateStatus(int bookingId, string bookingStatus, int villaNumber = 0)
         {
@@ -92,5 +96,8 @@ namespace White.Lagoon.Application.Services.Implementation
                 }
             }
         }
+
+
+
     }
 }
