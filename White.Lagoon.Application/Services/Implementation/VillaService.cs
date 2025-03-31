@@ -104,6 +104,16 @@ namespace White.Lagoon.Application.Services.Implementation
             return villaList;
         }
 
+        public bool IsVillaAvailable(int villaId, int nights, DateOnly checkInDate)
+        {
+            var villaNumberList = _unitOfWork.VillaNumber.GetAll().ToList();
+            var bookedVillas = _unitOfWork.Booking.GetAll(u => u.Status == SD.StatusApproved ||
+            u.Status == SD.StatusCheckedIn).ToList();
+            int roomAvailable = SD.VillaRoomsAvailable_Count(villaId,
+                villaNumberList, checkInDate, nights, bookedVillas);
+            return roomAvailable > 0 ? true : false;
+        }
+
         public void UpdateVilla(Villa villa)
         {
 

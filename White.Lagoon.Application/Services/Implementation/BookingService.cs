@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using White.Lagoon.Application.Common.Interfaces;
+using White.Lagoon.Application.Common.Utility;
 using White.Lagoon.Application.Services.Interface;
 using White.Lagoon.Domain.Entities;
 
@@ -52,6 +53,44 @@ namespace White.Lagoon.Application.Services.Implementation
         public Booking GetBookingById(int BookingId)
         {
             return _unitOfWork.Booking.Get(u => u.Id == BookingId, includeProperties: "User,Villa");
+        }
+
+
+
+        public void UpdateStatus(int bookingId, string bookingStatus, int villaNumber = 0)
+        {
+            var bookingFromnDb = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            if (bookingFromnDb != null)
+            {
+                bookingFromnDb.Status = bookingStatus;
+                if (bookingStatus == SD.StatusCheckedIn)
+                {
+                    bookingFromnDb.VillaNumber = villaNumber;
+                    bookingFromnDb.ActualCheckInDate = DateTime.Now;
+                }
+                if (bookingStatus == SD.StatusCompleted)
+                {
+                    bookingFromnDb.ActualCheckOutDate = DateTime.Now;
+                }
+            }
+        }
+
+        public void UpdateStripePaymentID(int bookingId, string sessionId, string paymentIntentId)
+        {
+            var bookingFromnDb = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            if (bookingFromnDb != null)
+            {
+                if (!string.IsNullOrEmpty(sessionId))
+                {
+                    bookingFromnDb.StripeSessionId = sessionId;
+                }
+                if (!string.IsNullOrEmpty(paymentIntentId))
+                {
+                    bookingFromnDb.StripePaymentIntentId = paymentIntentId;
+                    bookingFromnDb.PaymentDate = DateTime.Now;
+                    bookingFromnDb.IsPaymentSuccessful = true;
+                }
+            }
         }
     }
 }
