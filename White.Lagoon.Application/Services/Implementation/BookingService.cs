@@ -63,7 +63,7 @@ namespace White.Lagoon.Application.Services.Implementation
 
         public void UpdateStatus(int bookingId, string bookingStatus, int villaNumber = 0)
         {
-            var bookingFromnDb = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            var bookingFromnDb = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked: true);
             if (bookingFromnDb != null)
             {
                 bookingFromnDb.Status = bookingStatus;
@@ -77,11 +77,12 @@ namespace White.Lagoon.Application.Services.Implementation
                     bookingFromnDb.ActualCheckOutDate = DateTime.Now;
                 }
             }
+            _unitOfWork.Save();
         }
 
         public void UpdateStripePaymentID(int bookingId, string sessionId, string paymentIntentId)
         {
-            var bookingFromnDb = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            var bookingFromnDb = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked: true);
             if (bookingFromnDb != null)
             {
                 if (!string.IsNullOrEmpty(sessionId))
@@ -95,6 +96,7 @@ namespace White.Lagoon.Application.Services.Implementation
                     bookingFromnDb.IsPaymentSuccessful = true;
                 }
             }
+            _unitOfWork.Save();
         }
 
 
