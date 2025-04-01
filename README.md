@@ -14,3 +14,4 @@
 - Generate Charts in .NET Core
 - Build dynamic PDF, PPT, and Word documents in .NET Core
 - Perform Data Seeding and Deploy to MyWindowsHosting
+- Stripe Payment Integrations
