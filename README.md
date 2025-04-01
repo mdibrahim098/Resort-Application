@@ -2,7 +2,7 @@
 
 ## Features
 
-- Learn Identity Security of ASP.NET Core using MVC
+- Identity Security of ASP.NET Core using MVC
 - Build applications using ASP.NET Core MVC
 - Implement Repository Pattern
 - Follow Clean Architecture principles
