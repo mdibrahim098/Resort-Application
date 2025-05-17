@@ -4,7 +4,7 @@ A full-stack resort booking system built with **ASP.NET Core 8 MVC**, **Clean Ar
 
 ---
 
-## 🚀 What You'll Learn
+## 🚀 Use core topics
 
 - ✅ Structure of a Clean Architecture ASP.NET Core 8 MVC Project
 - ✅ Building Web Applications with ASP.NET Core MVC
@@ -32,7 +32,6 @@ A full-stack resort booking system built with **ASP.NET Core 8 MVC**, **Clean Ar
 - **SelectPDF / Syncfusion / EPPlus for Exports**
 - **MyWindowsHosting (Deployment)**
 
----
 
 ## 📁 Project Structure
 
@@ -47,59 +46,4 @@ A full-stack resort booking system built with **ASP.NET Core 8 MVC**, **Clean Ar
 ├── WhiteLagoon.DataAccess        # EF DbContext, Identity setup
 │
 └── README.md
-🧪 Features
-Feature	Description
-Room Booking	View rooms, check availability, and book
-Stripe Payment Integration	Real-time card processing
-Admin Panel	View bookings, check-in/out, manage villas
-Role-based Identity	Admin & Customer roles
-Dashboard & Charts	Booking analytics, revenue, availability
-Dynamic Reports	Export PDF, PPT, and Word
-Clean Architecture	Proper separation of concerns
-Seeding and Migration	Automated on startup
-Deployed to Hosting	On MyWindowsHosting
-
-🖥️ Prerequisites
-Visual Studio 2022 or later
-
-SQL Server Management Studio
-
-.NET 8 SDK
-
-Stripe Account (for keys)
-
-MyWindowsHosting account (for deployment)
-
-⚙️ Getting Started
-Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/yourusername/WhiteLagoonBooking.git
-cd WhiteLagoonBooking
-Setup Database & Stripe
-Update your appsettings.json with:
-
-SQL Server Connection String
-
-Stripe API Keys
-
-Run Migrations & Seed Database
-In the Package Manager Console:
-
-powershell
-Copy
-Edit
-Update-Database
-Or enable automatic migration/seeding on app start.
-
-🚨 Deployment
-Deploy to MyWindowsHosting
-Publish the project using Visual Studio → Publish → Folder Profile
-
-Upload via FTP or File Manager to MyWindowsHosting
-
-Configure SQL Server and connection strings via the hosting panel
-
-Ensure ASP.NET Core 8 runtime is enabled in your hosting plan
 
