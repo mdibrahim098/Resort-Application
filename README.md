@@ -1,4 +1,4 @@
-# 🏝️ White Lagoon Resort Booking System - ASP.NET Core 8 MVC Project
+# 🏝️Resort Booking System - ASP.NET Core 8 MVC Project
 
 A full-stack resort booking system built with **ASP.NET Core 8 MVC**, **Clean Architecture**, **Stripe Payments**, **Entity Framework Core**, and advanced admin features like dashboard charts and document exports. Designed for beginners to intermediate developers who want real-world project experience with .NET Core.
 
